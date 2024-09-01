@@ -91,7 +91,7 @@ export const SignUp = () => {
           <Box sx={{ mt: 2 }}>
             <Typography variant="body2">
               Already have an account?{' '}
-              <Link href="#" underline="hover">
+              <Link href="signin" underline="hover">
                 Sign in
               </Link>
             </Typography>
