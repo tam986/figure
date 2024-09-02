@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Container, Avatar, Link } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 function SignIn() {
-  const [email, setEmail] = useState('');
+  const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -11,11 +11,15 @@ function SignIn() {
     e.preventDefault();
 
     // Logic đăng nhập đơn giản
-    if (email === '' || password === '') {
-      setErrorMessage('Email và mật khẩu không được để trống.');
+    if (user === '' && password === '') {
+      setErrorMessage('user và mật khẩu không được để trống.');
+    }else if(user === ''){
+      setErrorMessage('user không được để trống.');
+    }else if(password === ''){
+      setErrorMessage('Mật khẩu không được để trống.');
     } else {
       setErrorMessage('');
-      console.log('Thông tin đăng nhập:', { email, password });
+      console.log('Thông tin đăng nhập:', { user, password });
     }
   };
 
@@ -30,23 +34,25 @@ function SignIn() {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+          {/* <LockOutlinedIcon /> */}
         </Avatar>
+        <Avatar alt="tam" src="./img/logo.jpg" />
         <Typography component="h1" variant="h5">
           Đăng Nhập
         </Typography>
+        
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Địa chỉ Email"
-            name="email"
-            autoComplete="email"
+            id="user"
+            label="Địa chỉ user"
+            name="user"
+            autoComplete="user"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
           />
           <TextField
             margin="normal"
