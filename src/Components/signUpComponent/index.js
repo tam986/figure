@@ -6,6 +6,7 @@ import {
   Typography,
   Box,
   Link,
+  CircularProgress,
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,7 @@ export const SignUp = () => {
     confirmPassword: '',
   });
   const navigate = useNavigate(); // Hook để điều hướng
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -30,12 +32,15 @@ export const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); 
     // Kiểm tra điều kiện xác thực, ví dụ: mật khẩu và xác nhận mật khẩu khớp nhau
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage('Mật khẩu và xác nhận mật khẩu không khớp.');
+      setLoading(false); 
       return;
     }
+    setErrorMessage('')
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Đặt độ trễ 1 giây
 
     try {
       const response = await axios.post('http://localhost:4000/api/auth/signup', formData);
@@ -47,15 +52,18 @@ export const SignUp = () => {
           password: '',
           confirmPassword: '',
         }); // Xóa các trường nhập liệu
-        setTimeout(() => {
-          navigate('/'); // Chuyển hướng đến trang đăng nhập sau 1 giây
-        }, 1000);
+        // setTimeout(() => {
+        //   navigate('/'); // Chuyển hướng đến trang đăng nhập sau 1 giây
+        // }, 2000);
       } else {
         throw new Error('Dữ liệu nhận vào không hợp lệ.');
       }
     } catch (error) {
       setErrorMessage('Đăng ký không thành công. Vui lòng kiểm tra lại thông tin.');
+    } finally {
+      setLoading(false); // Đảm bảo trạng thái loading luôn được tắt
     }
+    
   };
 
   return (
@@ -68,7 +76,7 @@ export const SignUp = () => {
           mt: 8,
         }}
       >
-        <Typography variant="h5">Sign Up</Typography>
+        <Typography variant="h5">Đăng Ký</Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
             label="Name"
@@ -78,6 +86,7 @@ export const SignUp = () => {
             fullWidth
             margin="normal"
             required
+            disabled={loading}
           />
           <TextField
             label="Email"
@@ -88,6 +97,7 @@ export const SignUp = () => {
             margin="normal"
             required
             type="email"
+            disabled={loading}
           />
           <TextField
             label="Password"
@@ -98,6 +108,7 @@ export const SignUp = () => {
             margin="normal"
             required
             type="password"
+            disabled={loading}
           />
           <TextField
             label="Confirm Password"
@@ -108,6 +119,7 @@ export const SignUp = () => {
             margin="normal"
             required
             type="password"
+            disabled={loading}
           />
           {errorMessage && (
             <Typography color="error" variant="body2">
@@ -124,14 +136,16 @@ export const SignUp = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 2 }}
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={20} />}
           >
-            Sign Up
-          </Button>
+            {loading ? 'Đang đăng ký...' : 'Đăng ký'}
+            </Button>
           <Box sx={{ mt: 2 }}>
             <Typography variant="body2">
-              Already have an account?{' '}
-              <Link href="/signin" underline="hover">
-                Sign in
+              Bạn đã có tài khoản?{' '}
+              <Link href="/" underline="hover">
+                Đăng nhập
               </Link>
             </Typography>
           </Box>

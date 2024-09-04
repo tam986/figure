@@ -18,7 +18,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const pages = [
   { label: 'Home', link: '/home' },
@@ -30,7 +30,6 @@ const settings = [
   { label: 'Profile', link: '/profile' },
   { label: 'Order', link: '/order' },
   { label: 'Login', link: '/login' },
-  // { label: 'Logout', link: '/Logout' }
   { label: 'Logout', action: 'logout' } // Thêm mục Logout với hành động logout
 
 
@@ -70,7 +69,6 @@ function Header({ userData, emailData }) {
   };
 
   const handleMenuClick = (link) => {
-    console.log(link, "?????")
     if (link) {
       navigate(link); // Điều hướng đến liên kết
     }
@@ -135,21 +133,27 @@ function Header({ userData, emailData }) {
               <MenuIcon />
             </IconButton>
             <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {pages.map((page) => (
-          <MenuItem
-            key={page.label}
-            onClick={() =>handleMenuClick(page.link)}
-          >
-            <Typography sx={{ textAlign: 'center' }}>
-              {page.label}
-            </Typography>
-          </MenuItem>
-        ))}
-      </Menu>
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.label} onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>{page.label}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
 
           <Typography
@@ -168,7 +172,7 @@ function Header({ userData, emailData }) {
               textDecoration: 'none',
             }}
           >
-            LOGOGGGGG
+            LOGO
           </Typography>
 
           {/* Nav Buttons */}
@@ -176,7 +180,7 @@ function Header({ userData, emailData }) {
             {pages.map((page) => (
               <Button
                 key={page.label}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleMenuClick(page.link)}
                 sx={{ my: 2, color: 'white', display: 'block', color: '#000' }}
               >
                 {page.label}
