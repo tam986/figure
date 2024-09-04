@@ -1,27 +1,46 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Container, Avatar, Link } from '@mui/material';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
-  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); // Hook để điều hướng
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Logic đăng nhập đơn giản
-    if (user === '' && password === '') {
-      setErrorMessage('user và mật khẩu không được để trống.');
-    }else if(user === ''){
-      setErrorMessage('user không được để trống.');
-    }else if(password === ''){
-      setErrorMessage('Mật khẩu không được để trống.');
+    // Kiểm tra đầu vào
+    if (email === '' && password === '') {
+        setErrorMessage('Email và mật khẩu không được để trống.');
+    } else if (email === '') {
+        setErrorMessage('Email không được để trống.');
+    } else if (password === '') {
+        setErrorMessage('Mật khẩu không được để trống.');
     } else {
-      setErrorMessage('');
-      console.log('Thông tin đăng nhập:', { user, password });
+        setErrorMessage('');
+        try {
+            const response = await axios.post('http://localhost:4000/api/auth/signin', {
+                email,
+                password,
+            });
+            if (response.data) {
+              const dataUser = response.data
+                localStorage.setItem("username",dataUser.name)
+                localStorage.setItem("email",dataUser.email)
+                navigate('/home'); // Redirect đến trang home sau khi đăng nhập thành công
+            } else {
+                throw new Error('Dữ liệu nhận vào không hợp lệ.');
+            }
+        } catch (error) {
+            setErrorMessage('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.');
+        }
     }
-  };
+};
 
   return (
     <Container component="main" maxWidth="xs">
@@ -34,9 +53,8 @@ function SignIn() {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          {/* <LockOutlinedIcon /> */}
+          <LockOutlinedIcon />
         </Avatar>
-        <Avatar alt="tam" src="./img/logo.jpg" />
         <Typography component="h1" variant="h5">
           Đăng Nhập
         </Typography>
@@ -46,13 +64,13 @@ function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="user"
-            label="Địa chỉ user"
-            name="user"
-            autoComplete="user"
+            id="email"
+            label="Địa chỉ email"
+            name="email"
+            autoComplete="email"
             autoFocus
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -89,7 +107,7 @@ function SignIn() {
                 Sign in
               </Link>
             </Typography>
-          </Box>
+        </Box>
     </Container>
   );
 }
