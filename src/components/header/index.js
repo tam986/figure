@@ -19,25 +19,74 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useNavigate } from 'react-router-dom';
+<<<<<<<< HEAD:src/components/header/index.js
 import SearchIcon from '@mui/icons-material/Search';
 import { TextField } from '@mui/material';
+========
+>>>>>>>> 2a47f85620501ddba81eebeb16c980aa4b1a91ac:src/Components/headerComponent/index.js
 
-const pages = ['Home', 'Products', 'Blog', 'Contact'];
-const settings = ['Profile', 'Order', 'Dashboard', 'Login'];
+const pages = [
+  { label: 'Home', link: '/home' },
+  { label: 'Products', link: '/products' },
+  { label: 'Blog', link: '/blog' },
+  { label: 'Contact', link: '/contact' }
+];
+const settings = [
+  { label: 'Profile', link: '/profile' },
+  { label: 'Order', link: '/order' },
+  { label: 'Login', link: '/login' },
+  { label: 'Logout', action: 'logout' } // Thêm mục Logout với hành động logout
+
+
+];
 const orders = [
-  { id: 1, image: 'https://via.placeholder.com/50',name:'product 1', price: '$50', quantity: 1 },
-  { id: 2, image: 'https://via.placeholder.com/50',name:'product 2', price: '$100', quantity: 2 },
+  { id: 1, image: 'https://via.placeholder.com/50', name: 'product 1', price: '$50', quantity: 1 },
+  { id: 2, image: 'https://via.placeholder.com/50', name: 'product 2', price: '$100', quantity: 2 },
 ];
 
+<<<<<<<< HEAD:src/components/header/index.js
 function Header() {
+========
+function Header({ userData, emailData }) {
+>>>>>>>> 2a47f85620501ddba81eebeb16c980aa4b1a91ac:src/Components/headerComponent/index.js
   const [Nav, setNav] = React.useState(null);
   const [User, setUser] = React.useState(null);
   const [showOrderTable, setShowOrderTable] = React.useState(false);
-  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const navigate = useNavigate();
   const handleOpenNavMenu = (event) => {
     setNav(event.currentTarget);
   };
+
+  const handleMenuItemClick = (action, link) => {
+    if (action === 'logout') {
+      // Xóa toàn bộ localStorage
+      localStorage.clear();
+      // Redirect đến trang đăng nhập hoặc trang chính
+      navigate('/');
+    } else if (link) {
+      // Redirect đến liên kết nếu có
+      navigate(link);
+    }
+    handleCloseUserMenu(); // Đóng menu sau khi nhấp vào mục
+  };
+
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuClick = (link) => {
+    if (link) {
+      navigate(link); // Điều hướng đến liên kết
+    }
+    handleClose(); // Đóng menu sau khi nhấp vào mục
+  };
+
+  const filteredSettings = settings.filter(setting =>
+    !(setting.label === 'Login' && userData)
+  );
 
   const handleOpenUserMenu = (event) => {
     setUser(event.currentTarget);
@@ -56,7 +105,7 @@ function Header() {
   };
 
   const handleSeeAllOrders = () => {
-    navigate('/orders'); 
+    navigate('/orders');
   };
   const handleSearch = (event) => {
     // Xử lý tìm kiếm khi người dùng nhập từ khóa
@@ -74,7 +123,7 @@ function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/home"
             sx={{
               width:'20%',
               mr: 2,
@@ -103,7 +152,7 @@ function Header() {
             </IconButton>
             <Menu
               id="menu-appbar"
-              anchorEl={Nav}
+              anchorEl={anchorEl}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -113,13 +162,13 @@ function Header() {
                 vertical: 'top',
                 horizontal: 'left',
               }}
-              open={Boolean(Nav)}
+              open={Boolean(anchorEl)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' }, color: '#000' }}
+              sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem key={page.label} onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -148,16 +197,17 @@ function Header() {
           <Box sx={{width:'60%', flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block',color: '#000' }}
+                key={page.label}
+                onClick={() => handleMenuClick(page.link)}
+                sx={{ my: 2, color: 'white', display: 'block', color: '#000' }}
               >
-                {page}
+                {page.label}
               </Button>
             ))}
           </Box>
 
           {/* Account & Cart */}
+<<<<<<<< HEAD:src/components/header/index.js
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '20%', position: 'relative' }}>
           <TextField
             variant="outlined"
@@ -176,9 +226,26 @@ function Header() {
             <ShoppingCartIcon sx={{ p: 0, fontSize: 30, color: '#000' ,'&:hover':{
               cursor:'pointer'
             }}} onClick={handleCartClick} />
+========
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '200px', position: 'relative' }}>
+            <ShoppingCartIcon sx={{
+              p: 0, fontSize: 30, color: '#000', '&:hover': {
+                cursor: 'pointer'
+              }
+            }} onClick={handleCartClick} />
+>>>>>>>> 2a47f85620501ddba81eebeb16c980aa4b1a91ac:src/Components/headerComponent/index.js
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }}>
-                <AccountCircleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 40, color: '#000' }} />
+                {userData ? (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <AccountCircleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 40, color: '#000' }} />
+                    <Typography variant="body1" fontWeight="bold" sx={{ color: '#000' }}>
+                      {userData}
+                    </Typography>
+                  </div>
+                ) : (
+                  <AccountCircleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 40, color: '#000' }} />
+                )}
               </IconButton>
             </Tooltip>
             <Menu
@@ -197,9 +264,14 @@ function Header() {
               open={Boolean(User)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+              {filteredSettings.map((setting) => (
+                <MenuItem
+                  key={setting.label}
+                  onClick={() => handleMenuItemClick(setting.action, setting.link)}
+                >
+                  <Typography sx={{ textAlign: 'center' }}>
+                    {setting.label}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -215,11 +287,11 @@ function Header() {
             maxWidth: '400px',
             position: 'absolute', // Position below the cart icon
             top: '67px', // Adjust distance from the cart icon
-            right: '0', 
+            right: '0',
             zIndex: 10, // Ensure it appears on top
             boxShadow: 3, // Optional for better visibility
             backgroundColor: 'white'
-            
+
           }}
         >
           <Table>
