@@ -18,7 +18,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import { TextField } from '@mui/material';
 
 const pages = ['Home', 'Products', 'Blog', 'Contact'];
 const settings = ['Profile', 'Order', 'Dashboard', 'Login'];
@@ -27,7 +29,7 @@ const orders = [
   { id: 2, image: 'https://via.placeholder.com/50',name:'product 2', price: '$100', quantity: 2 },
 ];
 
-function ResponsiveAppBar() {
+function Header() {
   const [Nav, setNav] = React.useState(null);
   const [User, setUser] = React.useState(null);
   const [showOrderTable, setShowOrderTable] = React.useState(false);
@@ -56,10 +58,17 @@ function ResponsiveAppBar() {
   const handleSeeAllOrders = () => {
     navigate('/orders'); 
   };
-
+  const handleSearch = (event) => {
+    // Xử lý tìm kiếm khi người dùng nhập từ khóa
+    if (event.key === 'Enter') {
+      const keyword = event.target.value;
+      console.log('Từ khóa tìm kiếm:', keyword);
+      // Thực hiện chức năng tìm kiếm ở đây
+    }
+  };
   return (
     <AppBar position="fixed" sx={{ bgcolor: '#fce1a8' }}>
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -67,10 +76,12 @@ function ResponsiveAppBar() {
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
+              width:'20%',
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
+              fontSize: '48px',
               letterSpacing: '.3rem',
               color: '#000',
               textDecoration: 'none',
@@ -134,7 +145,7 @@ function ResponsiveAppBar() {
           </Typography>
 
           {/* Nav Buttons */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{width:'60%', flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -147,7 +158,21 @@ function ResponsiveAppBar() {
           </Box>
 
           {/* Account & Cart */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '200px', position: 'relative' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '20%', position: 'relative' }}>
+          <TextField
+            variant="outlined"
+            placeholder="Tìm kiếm sản phẩm"
+            onKeyDown={handleSearch}
+           
+            InputProps={{
+              endAdornment: (
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+            sx={{ marginRight: 2, width: '250px' }}
+          />
             <ShoppingCartIcon sx={{ p: 0, fontSize: 30, color: '#000' ,'&:hover':{
               cursor:'pointer'
             }}} onClick={handleCartClick} />
@@ -228,4 +253,4 @@ function ResponsiveAppBar() {
   );
 }
 
-export default ResponsiveAppBar;
+export default Header;
