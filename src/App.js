@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import SignIn from "./Components/signInComponent/index"
-import SignUp from "./Components/signUpComponent/index"
-import Home from './Components/homeComponent';
+import  Register  from './pages/SignUp';
+import Login from './pages/SingIn';
 
-
-
+import Homepage from './pages/home';
+import ProductPgae from './pages/product';
 // Component Home sử dụng đúng
+
 
 
 function App() {
@@ -14,9 +14,10 @@ function App() {
     <Router>
       <Routes>
         {/* Sử dụng đúng component Home */}
-        <Route path="/" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/products" element={<ProductPgae/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Register />} />
       </Routes>
     </Router>
   );
